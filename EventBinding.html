@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>循环事件绑定</title>
+</head>
+<body>
+	<div id="btnBox">
+		<input type="button" value="btn_1">
+		<input type="button" value="btn_2">
+		<input type="button" value="btn_3">
+		<input type="button" value="btn_4">
+		<input type="button" value="btn_5">
+	</div>
+	<script type="text/javascript">
+		var btnBox = document.getElementById('btnBox');
+		var btns = btnBox.getElementsByTagName('input');
+		var len = btns.length;
+		// for (var i = 0; i < len; i++) {
+		// 	btns[i].onclick = function () {
+		// 		console.log(i);
+		// 	}
+		// }
+		// 依次点击按钮结果：5,5,5,5,5（与预想的0,1,2,3,4不符）
+
+		// 分析：
+		// 所有事件绑定都为异步编程（绑定的时候方法并没有执行），当触发点击事件，执行方法的时候，循环早已结束。
+
+		// 同步：JS中当前这个任务没有完成，下面的任务都不会执行，只有等当前任务彻底完成才会执行下面的任务
+		// 异步：JS中当前任务没有完成，需要等一会在完成，此时我们可以继续执行下面的任务
+
+		// 解决方式：
+		// 闭包
+		// for (var i = 0; i < len; i++) {
+		// 	~function (i) {
+		// 		btns[i].onclick = function () {
+		// 			console.log(i);
+		// 		}
+		// 	}(i);
+		// }
+
+		// for (var i = 0; i < len; i++) {
+		// 	btns[i].onclick = (function (i) {
+		// 		return function(){
+		// 			console.log(i);
+		// 		}
+		// 	})(i);
+		// }
+
+		// 块级作用域(ES6)
+		for (let i = 0; i < len; i++) {
+			btns[i].onclick = function () {
+				console.log(i);
+			}
+		}
+	</script>
+</body>
+</html>
